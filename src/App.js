@@ -1,11 +1,12 @@
 import 'styles/shared.scss';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import shortid from 'shortid';
 import Header from 'components/Header';
 import Section from 'components/Section';
 import Form from 'components/ContactForm';
 import ContactList from 'components/ContactList';
 import Filter from 'components/Filter';
+import { useLocalStorage } from 'hooks/useLocalStorage';
 
 const initialContacts = [
   { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
@@ -15,14 +16,8 @@ const initialContacts = [
 ];
 
 export default function App() {
-  const [contacts, setContacts] = useState(
-    JSON.parse(window.localStorage.getItem('contacts:')) ?? initialContacts,
-  );
+  const [contacts, setContacts] = useLocalStorage('contacts', initialContacts);
   const [filter, setFilter] = useState('');
-
-  useEffect(() => {
-    window.localStorage.setItem('contacts:', JSON.stringify(contacts));
-  }, [contacts]);
 
   const addContact = (name, number) => {
     const contact = [
